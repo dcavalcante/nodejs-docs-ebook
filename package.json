@@ -25,9 +25,6 @@
   "engines": {
     "node": ">=18"
   },
-  "dependencies": {
-    "@ibm/plex-mono": "2.5.0"
-  },
   "devDependencies": {
     "@types/node": "^22.10.0",
     "typescript": "^5.7.2"
