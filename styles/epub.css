@@ -87,12 +87,7 @@ pre.text-diagram code,
   font-kerning: none;
   font-variant-ligatures: none;
   text-align: left;
-  /*
-   * EPUB renderers tested (Okular and Kindle) render the first row of this
-   * preformatted Unicode grid one monospace cell to the left. Restore that
-   * first-line cell without altering the source text or the remaining rows.
-   */
-  text-indent: 1ch;
+  text-indent: 0;
 }
 
 img {
