@@ -30,6 +30,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: npm run build -- --source github --ref main
+      - name: Build diagram modes
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          npm run build:diagram-matrix -- --source github --ref main
+          npm run build:svg -- --source github --ref main
       - name: Inspect EPUB payload
         run: |
           EPUB="$(ls -t dist/*.epub | head -1)"
@@ -48,10 +54,18 @@ jobs:
           match = re.search(r'<pre[^>]*text-diagram[^>]*><code>(.*?)</code></pre>', html, re.S)
           assert match, 'event-loop text diagram not found'
           first, second, *rest = match.group(1).splitlines()
-          assert first.startswith('   ┌'), repr(first)
-          assert second.startswith('   │'), repr(second)
-          assert first.count('┌') == 1
+          assert '┌' in first and '│' in second, (repr(first), repr(second))
           PY
+          MATRIX="$(ls -t dist/*-matrix.epub | head -1)"
+          SVG="$(ls -t dist/*-svg.epub | head -1)"
+          test -n "$MATRIX"
+          test -n "$SVG"
+          unzip -p "$MATRIX" '*.xhtml' | grep -q 'A — Pandoc pre/code'
+          unzip -p "$MATRIX" '*.xhtml' | grep -q 'B — bare pre'
+          unzip -p "$MATRIX" '*.xhtml' | grep -q 'C — bare pre + one first-row ASCII space'
+          unzip -p "$MATRIX" '*.xhtml' | grep -q 'D — SVG'
+          unzip -p "$SVG" '*.xhtml' | grep -q 'text-diagram-svg'
+          unzip -p "$SVG" '*.xhtml' | grep -q '<svg'
           test -f dist/build-metadata.json
       - uses: actions/upload-artifact@v4
         if: success()
