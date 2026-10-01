@@ -48,7 +48,7 @@ jobs:
           match = re.search(r'<pre[^>]*text-diagram[^>]*><code>(.*?)</code></pre>', html, re.S)
           assert match, 'event-loop text diagram not found'
           first, second, *rest = match.group(1).splitlines()
-          assert first.startswith('    ┌'), repr(first)
+          assert first.startswith('   ┌'), repr(first)
           assert second.startswith('   │'), repr(second)
           assert first.count('┌') == 1
           PY
