@@ -11,10 +11,6 @@ local function escape_xml(text)
   return text:gsub('&', '&amp;'):gsub('<', '&lt;'):gsub('>', '&gt;')
 end
 
-local function bare_pre(text, extra_class)
-  return pandoc.RawBlock('html', '<pre class="text-diagram-bare ' .. (extra_class or '') .. '">' .. escape_xml(text) .. '</pre>')
-end
-
 local function svg_diagram(text)
   local lines = {}
   local max_chars = 0
@@ -39,24 +35,6 @@ local function svg_diagram(text)
   return pandoc.RawBlock('html', table.concat(out, ''))
 end
 
-local function matrix_diagram(code)
-  local original = code.text
-  local standard = pandoc.CodeBlock(original, code.attr)
-  standard.classes:insert('text-diagram')
-  local no_code = bare_pre(original, 'matrix-bare')
-  local extra_space = bare_pre(' ' .. original, 'matrix-bare-extra')
-  local blocks = {
-    pandoc.Para({pandoc.Strong({pandoc.Str('A — Pandoc pre/code, original Unicode')})}),
-    standard,
-    pandoc.Para({pandoc.Strong({pandoc.Str('B — bare pre, original Unicode')})}),
-    no_code,
-    pandoc.Para({pandoc.Strong({pandoc.Str('C — bare pre + one first-row ASCII space')})}),
-    extra_space,
-    pandoc.Para({pandoc.Strong({pandoc.Str('D — SVG, one fixed SVG text row per source row')})}),
-    svg_diagram(original)
-  }
-  return blocks
-end
 
 local function slug(value)
   local result = value:gsub('^/learn/?', '')
@@ -165,7 +143,6 @@ local function process_div(el)
           svg_diagram(code.text)
         }
       end
-      if diagram_mode == 'matrix' then return matrix_diagram(code) end
       code.classes:insert('text-diagram')
       return code
     end,
