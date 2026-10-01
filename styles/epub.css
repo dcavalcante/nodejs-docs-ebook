@@ -115,20 +115,7 @@ li > ul,
 li > ol { margin: 0.25em 0 0.4em; }
 
 
-/* Focused Kindle/KFX indentation diagnostics. */
-pre.matrix-zero-geometry,
-pre.matrix-zero-geometry code {
-  margin-left: 0 !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  text-indent: 0 !important;
-}
-
-pre.matrix-tiny-indent,
-pre.matrix-tiny-indent code {
-  text-indent: 0.01em !important;
-}
-
+/* Kindle-safe wrapper for Unicode box-drawing diagrams. */
 .text-diagram-frame {
   background: #f6f7f9;
   border: 1px solid #e2e4e9;
@@ -137,8 +124,8 @@ pre.matrix-tiny-indent code {
   padding: 0.75em 0.85em;
 }
 
-.text-diagram-frame pre.matrix-inner,
-.text-diagram-frame pre.matrix-inner code {
+.text-diagram-frame pre.text-diagram-inner,
+.text-diagram-frame pre.text-diagram-inner code {
   background: transparent;
   border: 0;
   border-radius: 0;
@@ -147,38 +134,9 @@ pre.matrix-tiny-indent code {
   text-indent: 0 !important;
 }
 
-.text-diagram-frame pre.matrix-inner.matrix-tiny-indent,
-.text-diagram-frame pre.matrix-inner.matrix-tiny-indent code {
-  text-indent: 0.01em !important;
-}
-
-.matrix-sentinel {
+.text-diagram-sentinel {
   font-size: 0;
   line-height: 0;
-}
-
-.text-diagram-rows {
-  background: #f6f7f9;
-  border: 1px solid #e2e4e9;
-  border-radius: 0.35em;
-  font-family: "IBM Plex Mono Ebook", monospace;
-  font-size: 0.70em;
-  line-height: 1.2;
-  margin: 1em 0;
-  padding: 0.75em 0.85em;
-  text-align: left;
-  text-indent: 0;
-}
-
-.text-diagram-row {
-  display: block;
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  margin: 0;
-  padding: 0;
-  text-indent: 0;
-  white-space: nowrap;
 }
 
 /* SVG fallback for Kindle box-drawing diagrams. */
