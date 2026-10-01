@@ -21,8 +21,7 @@
     "doctor": "npm run compile && node bin/nodejs-docs-ebook.js doctor",
     "test": "npm run compile && node --test lib/test/*.test.js",
     "prepack": "npm run clean && npm test",
-    "build:svg": "npm run compile && node bin/nodejs-docs-ebook.js build --diagram-mode svg",
-    "build:diagram-matrix": "npm run compile && node bin/nodejs-docs-ebook.js build --diagram-mode matrix"
+    "build:svg": "npm run compile && node bin/nodejs-docs-ebook.js build --diagram-mode svg"
   },
   "engines": {
     "node": ">=18"
