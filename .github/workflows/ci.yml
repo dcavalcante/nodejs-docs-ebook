@@ -30,8 +30,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: npm run build -- --source github --ref main
-      - name: Build diagram lab
-        run: npm run build:diagram-lab
       - name: Inspect EPUB payload
         run: |
           EPUB="$(ls -t dist/*.epub | head -1)"
@@ -39,11 +37,22 @@ jobs:
           unzip -l "$EPUB" | grep -q 'IBMPlexMono-Regular.ttf'
           unzip -l "$EPUB" | grep -q 'IBMPlexMono-Bold.ttf'
           unzip -p "$EPUB" '*.xhtml' | grep -q 'text-diagram'
+          python - "$EPUB" <<'PY'
+          import re, sys, zipfile
+          with zipfile.ZipFile(sys.argv[1]) as z:
+              html = ''.join(
+                  z.read(name).decode('utf-8')
+                  for name in z.namelist()
+                  if name.endswith('.xhtml')
+              )
+          match = re.search(r'<pre[^>]*text-diagram[^>]*><code>(.*?)</code></pre>', html, re.S)
+          assert match, 'event-loop text diagram not found'
+          first, second, *rest = match.group(1).splitlines()
+          assert first.startswith('    ┌'), repr(first)
+          assert second.startswith('   │'), repr(second)
+          assert first.count('┌') == 1
+          PY
           test -f dist/build-metadata.json
-          LAB="$(ls -t dist/diagram-lab-*.epub | head -1)"
-          test -n "$LAB"
-          unzip -p "$LAB" '*.xhtml' | grep -q 'A — baseline'
-          unzip -p "$LAB" '*.xhtml' | grep -q 'G — baseline with inline'
       - uses: actions/upload-artifact@v4
         if: success()
         with:
