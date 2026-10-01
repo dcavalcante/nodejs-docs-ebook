@@ -42,7 +42,9 @@ export async function build(manifest: BookManifest, options: BuildOptions = {}):
   const source = sourceRevision(sourceRoot, options.ref ?? manifest.source.ref);
   const generatedAt = new Date();
   const editionDate = generatedAt.toISOString().slice(0, 10);
-  const outputStem = `${manifest.book.slug}-${editionDate}`;
+  const diagramMode = options.diagramMode ?? 'text';
+  const modeSuffix = diagramMode === 'text' ? '' : `-${diagramMode}`;
+  const outputStem = `${manifest.book.slug}-${editionDate}${modeSuffix}`;
   const invocationRoot = process.cwd();
   const outputDir = path.resolve(invocationRoot, options.outputDir ?? 'dist');
   const workDir = path.resolve(invocationRoot, options.workDir ?? path.join('.nodejs-docs-ebook', 'work'));
@@ -53,7 +55,7 @@ export async function build(manifest: BookManifest, options: BuildOptions = {}):
   await fsp.writeFile(temporaryMarkdown, generated.markdown); await fsp.rename(temporaryMarkdown, markdownFile);
   const {regular, bold} = await preparePlexFonts(workDir);
   const resourcePaths = [sourceRoot, ...generated.sourceDirectories];
-  const common = [markdownFile, '--from=markdown+fenced_divs', '--toc', '--toc-depth=2', '--split-level=2', '--no-highlight', `--resource-path=${resourcePaths.join(path.delimiter)}`, `--lua-filter=${path.join(PROJECT_ROOT, 'filters', 'ebook.lua')}`, `--css=${path.join(PROJECT_ROOT, 'styles', 'epub.css')}`, `--epub-embed-font=${regular}`, `--epub-embed-font=${bold}`];
+  const common = [markdownFile, '--from=markdown+fenced_divs', '--toc', '--toc-depth=2', '--split-level=2', '--no-highlight', `--resource-path=${resourcePaths.join(path.delimiter)}`, `--metadata=diagram-mode:${diagramMode}`, `--lua-filter=${path.join(PROJECT_ROOT, 'filters', 'ebook.lua')}`, `--css=${path.join(PROJECT_ROOT, 'styles', 'epub.css')}`, `--epub-embed-font=${regular}`, `--epub-embed-font=${bold}`];
   const outputs: string[] = []; const stagedOutputs = new Map<string, string>();
   try {
     const output = path.join(outputDir, `${outputStem}.epub`);
