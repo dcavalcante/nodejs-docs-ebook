@@ -1,6 +1,6 @@
 # Node.js Docs Ebook
 
-Build an unofficial EPUB edition of the current Node.js Learn documentation without modifying the upstream `nodejs/nodejs-learn` repository.
+Build an unofficial EPUB edition of the current Node.js Learn documentation without modifying the upstream `nodejs/learn` repository.
 
 The generator is intentionally similar to `react-docs-ebook`: it can use a local sibling checkout for development or download and cache a pinned GitHub revision for standalone builds. The book structure is declared in `book.json`, which can be checked against upstream `site.json` for additions, removals, renames, moves, and ordering changes.
 
@@ -20,7 +20,7 @@ Clone upstream beside this project with:
 
 ```bash
 cd ~/Projects
-gh repo clone nodejs/learn learn
+gh repo clone nodejs/learn nodejs-learn
 ```
 
 ## Requirements
@@ -52,7 +52,7 @@ npm run build
 With an explicit checkout:
 
 ```bash
-npm run build -- --source ../learn
+npm run build -- --source ../nodejs-learn
 ```
 
 Without a checkout, download and cache current upstream `main`:
@@ -123,7 +123,7 @@ Each article is wrapped in a temporary Pandoc fenced `Div` carrying its original
 - removes each source article's duplicate top-level heading;
 - shifts article headings beneath the book's section/page hierarchy;
 - prefixes heading IDs so anchors are unique across the whole book;
-- rewrites `/nodejs-learn/...`, relative article links, and fragment links to EPUB-local anchors;
+- rewrites `/learn/...`, relative article links, and fragment links to EPUB-local anchors;
 - resolves relative images against the original article directory;
 - identifies Unicode box-drawing code blocks for Kindle-safe styling.
 
@@ -139,4 +139,4 @@ The initial suite checks the manifest shape, route uniqueness/count, stable rout
 
 ## Licensing
 
-The generator code is MIT-licensed. Generated books incorporate upstream Node.js documentation and remain subject to upstream terms; see `NOTICE.md`. Automated public EPUB releases are intentionally not enabled until the current `nodejs/nodejs-learn` documentation licensing/attribution path is confirmed.
+The generator code is MIT-licensed. Generated books incorporate upstream Node.js documentation and remain subject to upstream terms; see `NOTICE.md`. Automated public EPUB releases are intentionally not enabled until the current `nodejs/learn` documentation licensing/attribution path is confirmed.
