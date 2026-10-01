@@ -36,6 +36,7 @@ jobs:
           test -n "$EPUB"
           unzip -l "$EPUB" | grep -q 'IBMPlexMono-Regular.woff2'
           unzip -l "$EPUB" | grep -q 'IBMPlexMono-Bold.woff2'
+          unzip -p "$EPUB" '*.xhtml' | grep -q 'text-diagram'
           test -f dist/build-metadata.json
       - uses: actions/upload-artifact@v4
         if: success()
