@@ -1,0 +1,114 @@
+@font-face {
+  font-family: "IBM Plex Mono Ebook";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/IBMPlexMono-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Mono Ebook";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/IBMPlexMono-Bold.woff2") format("woff2");
+}
+
+html,
+body,
+p,
+pre,
+pre code {
+  text-indent: 0;
+}
+
+body {
+  line-height: 1.45;
+}
+
+p {
+  margin: 0.75em 0;
+}
+
+pre {
+  background: #f6f7f9;
+  border: 1px solid #e2e4e9;
+  border-radius: 0.35em;
+  font-family: "IBM Plex Mono Ebook", monospace;
+  font-size: 0.92em;
+  line-height: 1.4;
+  margin: 1em 0;
+  padding: 0.75em 0.85em;
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  tab-size: 2;
+}
+
+pre code,
+pre code * {
+  border: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-style: normal;
+  line-height: inherit;
+  margin: 0;
+  padding: 0;
+  text-indent: 0;
+  white-space: inherit;
+}
+
+pre code {
+  display: block;
+}
+
+code {
+  font-family: "IBM Plex Mono Ebook", monospace;
+  font-size: 0.95em;
+}
+
+/*
+ * Box-drawing diagrams must remain a fixed character grid. Ordinary code is
+ * allowed to wrap on narrow readers; these blocks are deliberately not.
+ * The smaller size is chosen so Node's event-loop diagram fits more e-readers
+ * without surrendering the original Unicode representation.
+ */
+pre.text-diagram,
+pre.text-diagram code,
+.text-diagram,
+.text-diagram code {
+  font-family: "IBM Plex Mono Ebook", monospace !important;
+  font-size: 0.70em;
+  line-height: 1.2;
+  white-space: pre !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  hyphens: none !important;
+  letter-spacing: 0;
+  word-spacing: 0;
+  font-kerning: none;
+  font-variant-ligatures: none;
+  text-align: left;
+}
+
+img {
+  display: block;
+  height: auto;
+  margin: 1em auto;
+  max-width: 100%;
+}
+
+h1 { font-size: 1.65em; margin: 1.6em 0 0.9em; }
+h2 { font-size: 1.42em; margin: 1.5em 0 0.85em; }
+h3 { font-size: 1.25em; margin: 1.4em 0 0.8em; }
+h4 { font-size: 1.12em; margin: 1.3em 0 0.75em; }
+h5,
+h6 { font-size: 1.02em; margin: 1.2em 0 0.7em; }
+
+ul,
+ol {
+  margin: 0.65em 0 1em;
+  padding-left: 1.6em;
+}
+
+li { margin: 0.25em 0; }
+li > ul,
+li > ol { margin: 0.25em 0 0.4em; }
