@@ -1,10 +1,66 @@
+local diagram_mode = 'text'
+
+function Meta(meta)
+  if meta['diagram-mode'] then diagram_mode = pandoc.utils.stringify(meta['diagram-mode']) end
+  return meta
+end
+
 local function contains_box_drawing(text)
   for _, codepoint in utf8.codes(text) do
-    if codepoint >= 0x2500 and codepoint <= 0x257F then
-      return true
-    end
+    if codepoint >= 0x2500 and codepoint <= 0x257F then return true end
   end
   return false
+end
+
+local function escape_xml(text)
+  return text:gsub('&', '&amp;'):gsub('<', '&lt;'):gsub('>', '&gt;')
+end
+
+local function bare_pre(text, extra_class)
+  return pandoc.RawBlock('html', '<pre class="text-diagram-bare ' .. (extra_class or '') .. '">' .. escape_xml(text) .. '</pre>')
+end
+
+local function svg_diagram(text)
+  local lines = {}
+  local max_chars = 0
+  for line in (text .. '\n'):gmatch('(.-)\n') do
+    table.insert(lines, line)
+    local n = utf8.len(line) or #line
+    if n > max_chars then max_chars = n end
+  end
+  local cell, line_height, font_size = 6, 14, 10
+  local width = math.max(1, max_chars * cell)
+  local height = math.max(1, #lines * line_height + 4)
+  local out = {
+    '<svg class="text-diagram-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Unicode text diagram" viewBox="0 0 ' .. width .. ' ' .. height .. '">',
+    '<g font-family="IBM Plex Mono Ebook, monospace" font-size="' .. font_size .. '">'
+  }
+  for i, line in ipairs(lines) do
+    local chars = utf8.len(line) or #line
+    local target = math.max(1, chars * cell)
+    table.insert(out, '<text xml:space="preserve" x="0" y="' .. (i * line_height) .. '" textLength="' .. target .. '" lengthAdjust="spacingAndGlyphs">' .. escape_xml(line) .. '</text>')
+  end
+  table.insert(out, '</g></svg>')
+  return pandoc.RawBlock('html', table.concat(out, ''))
+end
+
+local function matrix_diagram(code)
+  local original = code.text
+  local standard = pandoc.CodeBlock(original, code.attr)
+  standard.classes:insert('text-diagram')
+  local no_code = bare_pre(original, 'matrix-bare')
+  local extra_space = bare_pre(' ' .. original, 'matrix-bare-extra')
+  local blocks = {
+    pandoc.Para({pandoc.Strong({pandoc.Str('A — Pandoc pre/code, original Unicode')})}),
+    standard,
+    pandoc.Para({pandoc.Strong({pandoc.Str('B — bare pre, original Unicode')})}),
+    no_code,
+    pandoc.Para({pandoc.Strong({pandoc.Str('C — bare pre + one first-row ASCII space')})}),
+    extra_space,
+    pandoc.Para({pandoc.Strong({pandoc.Str('D — SVG, one fixed SVG text row per source row')})}),
+    svg_diagram(original)
+  }
+  return blocks
 end
 
 local function slug(value)
@@ -107,14 +163,10 @@ function Div(el)
       return image
     end,
     CodeBlock = function(code)
-      if contains_box_drawing(code.text) then
-        code.classes:insert('text-diagram')
-        -- Kindle renders the first row of preformatted box-drawing blocks one
-        -- monospace cell to the left. Variant B of the on-device diagnostic
-        -- confirmed that one additional ordinary ASCII space restores that
-        -- row while leaving the remaining grid untouched.
-        code.text = ' ' .. code.text
-      end
+      if not contains_box_drawing(code.text) then return code end
+      if diagram_mode == 'svg' then return svg_diagram(code.text) end
+      if diagram_mode == 'matrix' then return matrix_diagram(code) end
+      code.classes:insert('text-diagram')
       return code
     end,
   })
