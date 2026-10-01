@@ -1,9 +1,5 @@
 local diagram_mode = 'text'
 
-function Meta(meta)
-  if meta['diagram-mode'] then diagram_mode = pandoc.utils.stringify(meta['diagram-mode']) end
-end
-
 local function contains_box_drawing(text)
   for _, codepoint in utf8.codes(text) do
     if codepoint >= 0x2500 and codepoint <= 0x257F then return true end
@@ -135,7 +131,7 @@ local function rewrite_image(target, source_dir)
   return resolved
 end
 
-function Div(el)
+local function process_div(el)
   if not el.classes:includes('book-page') then return nil end
   local route = el.attributes['route'] or '/learn'
   local page_prefix = el.attributes['page-prefix'] or slug(route)
@@ -171,4 +167,13 @@ function Div(el)
   })
 
   return el.content
+end
+
+
+function Pandoc(doc)
+  if doc.meta['diagram-mode'] then
+    diagram_mode = pandoc.utils.stringify(doc.meta['diagram-mode'])
+  end
+  doc.blocks = doc.blocks:walk({Div = process_div})
+  return doc
 end
