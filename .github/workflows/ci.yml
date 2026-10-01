@@ -66,9 +66,10 @@ jobs:
           matrix = xhtml(sys.argv[2])
           svg = xhtml(sys.argv[3])
 
-          match = re.search(r'<pre[^>]*text-diagram[^>]*><code>(.*?)</code></pre>', text, re.S)
-          assert match, 'production text diagram not found'
-          first, second, *rest = match.group(1).splitlines()
+          matches = re.findall(r'<pre[^>]*text-diagram[^>]*><code>(.*?)</code></pre>', text, re.S)
+          event_loop = next((body for body in matches if 'pending callbacks' in body), None)
+          assert event_loop, 'event-loop production text diagram not found'
+          first, second, *rest = event_loop.splitlines()
           assert '┌' in first and '│' in second, (repr(first), repr(second))
 
           labels = [
