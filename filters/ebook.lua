@@ -36,55 +36,16 @@ local function svg_diagram(text)
 end
 
 
-local function matrix_label(text)
-  return pandoc.Para({pandoc.Strong({pandoc.Str(text)})})
-end
-
-local function raw_pre(text, classes, sentinel)
-  local prefix = sentinel and '<span class="matrix-sentinel">&#8288;</span>' or ''
-  return pandoc.RawBlock('html', '<pre class="text-diagram ' .. classes .. '"><code>' .. prefix .. escape_xml(text) .. '</code></pre>')
-end
-
-local function framed_pre(text, tiny_indent, sentinel)
-  local indent_class = tiny_indent and ' matrix-tiny-indent' or ''
-  local prefix = sentinel and '<span class="matrix-sentinel">&#8288;</span>' or ''
+local function text_diagram(text)
+  -- Kindle/Send-to-Kindle can special-case the first text node in a
+  -- preformatted block, shifting only the first row. U+2060 WORD JOINER is
+  -- zero-width but non-whitespace, so placing it before the diagram prevents
+  -- that first-node treatment without changing the visible character grid.
   return pandoc.RawBlock('html',
-    '<div class="text-diagram-frame"><pre class="text-diagram matrix-inner' .. indent_class .. '"><code>' ..
-    prefix .. escape_xml(text) .. '</code></pre></div>')
-end
-
-local function row_diagram(text)
-  local rows = {}
-  for line in (text .. '\n'):gmatch('(.-)\n') do
-    local escaped = escape_xml(line):gsub(' ', '&#160;')
-    table.insert(rows, '<div class="text-diagram-row">' .. escaped .. '</div>')
-  end
-  return pandoc.RawBlock('html', '<div class="text-diagram-rows">' .. table.concat(rows, '') .. '</div>')
-end
-
-local function matrix_diagram(text)
-  local baseline = pandoc.CodeBlock(text)
-  baseline.classes:insert('text-diagram')
-  baseline.classes:insert('matrix-baseline')
-
-  return {
-    matrix_label('A — current production pre/code'),
-    baseline,
-    matrix_label('B — pre/code with zero horizontal margin and padding'),
-    raw_pre(text, 'matrix-zero-geometry', false),
-    matrix_label('C — zero horizontal geometry + text-indent: 0.01em'),
-    raw_pre(text, 'matrix-zero-geometry matrix-tiny-indent', false),
-    matrix_label('D — visual padding on wrapper; inner pre/code has zero geometry'),
-    framed_pre(text, false, false),
-    matrix_label('E — wrapper padding + inner text-indent: 0.01em'),
-    framed_pre(text, true, false),
-    matrix_label('F — wrapper padding + zero-width non-whitespace sentinel before first text node'),
-    framed_pre(text, false, true),
-    matrix_label('G — one fixed-width block per source row; spaces encoded as NBSP'),
-    row_diagram(text),
-    matrix_label('H — SVG control'),
-    svg_diagram(text),
-  }
+    '<div class="text-diagram-frame"><pre class="text-diagram text-diagram-inner"><code>' ..
+    '<span class="text-diagram-sentinel">&#8288;</span>' ..
+    escape_xml(text) ..
+    '</code></pre></div>')
 end
 
 local function slug(value)
@@ -194,11 +155,7 @@ local function process_div(el)
           svg_diagram(code.text)
         }
       end
-      if diagram_mode == 'matrix' and code.text:find('pending callbacks', 1, true) then
-        return matrix_diagram(code.text)
-      end
-      code.classes:insert('text-diagram')
-      return code
+      return text_diagram(code.text)
     end,
   })
 
