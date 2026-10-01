@@ -107,17 +107,7 @@ function Div(el)
       return image
     end,
     CodeBlock = function(code)
-      if contains_box_drawing(code.text) then
-        code.classes:insert('text-diagram')
-        -- Some EPUB/Kindle renderers discard leading ASCII spaces at the
-        -- beginning of a preformatted block while preserving later lines.
-        -- Replace only the first line's leading spaces with NBSP. IBM Plex
-        -- Mono gives U+00A0 the same advance width as U+0020, so the Unicode
-        -- character grid remains unchanged while the indentation survives.
-        code.text = code.text:gsub('^( +)', function(spaces)
-          return string.rep(utf8.char(0x00A0), #spaces)
-        end, 1)
-      end
+      if contains_box_drawing(code.text) then code.classes:insert('text-diagram') end
       return code
     end,
   })
