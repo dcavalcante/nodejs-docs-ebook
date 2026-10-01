@@ -10,17 +10,17 @@ The easiest development layout is:
 
 ```text
 ~/Projects/
-├── nodejs-learn/
+├── learn/
 └── nodejs-docs-ebook/
 ```
 
-The source checkout does **not** have to be exactly `../nodejs-learn`. Source discovery walks upward from the invocation directory and checks each ancestor plus `<ancestor>/nodejs-learn`. You can always override it with `--source PATH`, `NODEJS_LEARN_SOURCE`, or `--source github`.
+The source checkout does **not** have to be exactly `../learn`. Source discovery walks upward from the invocation directory and checks each ancestor plus `<ancestor>/learn`. You can always override it with `--source PATH`, `NODEJS_LEARN_SOURCE`, or `--source github`.
 
 Clone upstream beside this project with:
 
 ```bash
 cd ~/Projects
-gh repo clone nodejs/learn nodejs-learn
+gh repo clone nodejs/learn learn
 ```
 
 ## Requirements
@@ -45,7 +45,7 @@ npm run doctor
 
 ## Build
 
-With a sibling `nodejs-learn` checkout:
+With a sibling `learn` checkout:
 
 ```bash
 npm run build
@@ -54,7 +54,7 @@ npm run build
 With an explicit checkout:
 
 ```bash
-npm run build -- --source ../nodejs-learn
+npm run build -- --source ../learn
 ```
 
 Without a checkout, download and cache current upstream `main`:
