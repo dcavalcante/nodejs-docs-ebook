@@ -10,7 +10,7 @@
   "source": {
     "repository": "nodejs/learn",
     "ref": "main",
-    "localDirectory": "nodejs-learn",
+    "localDirectory": "learn",
     "sidebar": "site.json",
     "contentDirectory": "pages",
     "trackOrder": true
