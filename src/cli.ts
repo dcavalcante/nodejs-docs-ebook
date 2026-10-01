@@ -7,13 +7,13 @@ import {PROJECT_ROOT, resolveSource} from './source';
 import type {CliOptions} from './types';
 
 export function usage(): string {
-  return `nodejs-docs-book\n\nCommands:\n  build           Build the EPUB\n  check-updates   Compare book.json with nodejs/learn site.json\n  doctor          Check Pandoc availability\n\nCommon options:\n  --manifest PATH       Manifest path (default: book.json)\n  --source PATH|github  Local nodejs/learn checkout or GitHub archive\n  --ref REF             Git branch, tag, or commit (default from manifest)\n  --refresh             Redownload a GitHub source archive\n  --download            Download source even when a local checkout exists\n\nBuild options:\n  --output-dir PATH     Output directory (default: dist)\n  --work-dir PATH       Intermediate directory (default: .nodejs-docs-ebook/work)`;
+  return `nodejs-docs-book\n\nCommands:\n  build           Build the EPUB\n  check-updates   Compare book.json with nodejs/learn site.json\n  doctor          Check Pandoc availability\n\nCommon options:\n  --manifest PATH       Manifest path (default: book.json)\n  --source PATH|github  Local nodejs/learn checkout or GitHub archive\n  --ref REF             Git branch, tag, or commit (default from manifest)\n  --refresh             Redownload a GitHub source archive\n  --download            Download source even when a local checkout exists\n\nBuild options:\n  --output-dir PATH     Output directory (default: dist)\n  --work-dir PATH       Intermediate directory (default: .nodejs-docs-ebook/work)\n  --diagram-mode MODE   text (default), matrix, or svg`;
 }
 
 const booleanOptions = new Set(['refresh', 'download', 'help']);
-const valueOptions = new Set(['manifest', 'source', 'ref', 'outputDir', 'workDir']);
+const valueOptions = new Set(['manifest', 'source', 'ref', 'outputDir', 'workDir', 'diagramMode']);
 function setBooleanOption(options: CliOptions, key: string): void { if (key === 'refresh') options.refresh = true; else if (key === 'download') options.download = true; else if (key === 'help') options.help = true; }
-function setStringOption(options: CliOptions, key: string, value: string): void { if (key === 'manifest') options.manifest = value; else if (key === 'source') options.source = value; else if (key === 'ref') options.ref = value; else if (key === 'outputDir') options.outputDir = value; else if (key === 'workDir') options.workDir = value; }
+function setStringOption(options: CliOptions, key: string, value: string): void { if (key === 'manifest') options.manifest = value; else if (key === 'source') options.source = value; else if (key === 'ref') options.ref = value; else if (key === 'outputDir') options.outputDir = value; else if (key === 'workDir') options.workDir = value; else if (key === 'diagramMode') { if (!['text', 'matrix', 'svg'].includes(value)) throw new Error('Invalid diagram mode'); options.diagramMode = value as 'text' | 'matrix' | 'svg'; } }
 function camelCase(value: string): string { return value.replace(/-([a-z])/g, (_, letter: string) => letter.toUpperCase()); }
 
 export function parseArgs(argv: readonly string[]): CliOptions {
