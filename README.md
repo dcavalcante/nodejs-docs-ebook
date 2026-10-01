@@ -35,7 +35,7 @@ Install dependencies:
 npm install
 ```
 
-`@ibm/plex-mono` is used only to embed the complete IBM Plex Mono WOFF2 files into the EPUB. IBM's package contains a telemetry postinstall that only collects in CI/container-like environments; CI for this project explicitly sets `IBM_TELEMETRY_DISABLED=true`. You can also set that variable yourself while installing if desired.
+`@ibm/plex-mono` is used only to embed the complete IBM Plex Mono TrueType files into the EPUB. IBM's package contains a telemetry postinstall that only collects in CI/container-like environments; CI for this project explicitly sets `IBM_TELEMETRY_DISABLED=true`. You can also set that variable yourself while installing if desired.
 
 Check the machine:
 
@@ -97,7 +97,7 @@ The Node.js event-loop illustration stays as its original Unicode box-drawing te
 
 The EPUB then:
 
-- embeds the **complete** IBM Plex Mono regular and bold WOFF2 fonts;
+- embeds the **complete** IBM Plex Mono regular and bold TrueType fonts;
 - keeps ordinary code at `white-space: pre-wrap` so long source lines can wrap on narrow readers;
 - forces box-drawing blocks to `white-space: pre` with wrapping, hyphenation, kerning, and ligatures disabled;
 - renders diagrams at a smaller size (`0.70em`) to improve the chance that the widest Node diagrams fit a portrait e-reader viewport.
