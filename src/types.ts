@@ -40,6 +40,7 @@ export interface SourceOptions {
 export interface BuildOptions extends SourceOptions {
   outputDir?: string;
   workDir?: string;
+  diagramMode?: 'text' | 'matrix' | 'svg';
 }
 
 export interface CliOptions extends BuildOptions {
