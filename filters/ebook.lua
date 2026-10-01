@@ -2,7 +2,6 @@ local diagram_mode = 'text'
 
 function Meta(meta)
   if meta['diagram-mode'] then diagram_mode = pandoc.utils.stringify(meta['diagram-mode']) end
-  return meta
 end
 
 local function contains_box_drawing(text)
