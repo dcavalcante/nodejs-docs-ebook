@@ -12,7 +12,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     env:
       IBM_TELEMETRY_DISABLED: "true"
     steps:
@@ -22,3 +22,25 @@ jobs:
           node-version: 22
       - run: npm install
       - run: npm test
+      - name: Install Pandoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+      - name: Build current Node.js Learn EPUB
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: npm run build -- --source github --ref main
+      - name: Inspect EPUB payload
+        run: |
+          EPUB="$(ls -t dist/*.epub | head -1)"
+          test -n "$EPUB"
+          unzip -l "$EPUB" | grep -q 'IBMPlexMono-Regular.woff2'
+          unzip -l "$EPUB" | grep -q 'IBMPlexMono-Bold.woff2'
+          test -f dist/build-metadata.json
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: nodejs-docs-ebook
+          path: |
+            dist/*.epub
+            dist/build-metadata.json
