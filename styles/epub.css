@@ -113,3 +113,29 @@ ol {
 li { margin: 0.25em 0; }
 li > ul,
 li > ol { margin: 0.25em 0 0.4em; }
+
+
+/* Alternate diagram renderers used by --diagram-mode matrix/svg. */
+pre.text-diagram-bare {
+  background: #f6f7f9;
+  border: 1px solid #e2e4e9;
+  border-radius: 0.35em;
+  font-family: "IBM Plex Mono Ebook", monospace;
+  font-size: 0.70em;
+  line-height: 1.2;
+  margin: 1em 0;
+  padding: 0.75em 0.85em;
+  text-align: left;
+  text-indent: 0;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+  letter-spacing: 0;
+  word-spacing: 0;
+}
+svg.text-diagram-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 1em 0;
+}
