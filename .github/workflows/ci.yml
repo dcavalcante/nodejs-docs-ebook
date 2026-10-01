@@ -34,25 +34,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: npm run build:svg -- --source github --ref main
-      - name: Build focused Kindle matrix
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: npm run build:diagram-matrix -- --source github --ref main
       - name: Inspect EPUB payload
         run: |
-          TEXT="$(find dist -maxdepth 1 -name '*.epub' ! -name '*-svg.epub' ! -name '*-matrix.epub' -print | head -1)"
+          TEXT="$(find dist -maxdepth 1 -name '*.epub' ! -name '*-svg.epub' -print | head -1)"
           SVG="$(find dist -maxdepth 1 -name '*-svg.epub' -print | head -1)"
-          MATRIX="$(find dist -maxdepth 1 -name '*-matrix.epub' -print | head -1)"
           test -n "$TEXT"
           test -n "$SVG"
-          test -n "$MATRIX"
 
           unzip -l "$TEXT" | grep -q 'IBMPlexMono-Regular.ttf'
           unzip -l "$TEXT" | grep -q 'IBMPlexMono-Bold.ttf'
-          unzip -p "$TEXT" '*.xhtml' | grep -q 'text-diagram'
 
-          python - "$TEXT" "$MATRIX" "$SVG" <<'PY'
-          import re, sys, zipfile
+          python - "$TEXT" "$SVG" <<'PY'
+          import sys, zipfile
 
           def xhtml(epub):
               with zipfile.ZipFile(epub) as z:
@@ -63,42 +56,18 @@ jobs:
                   )
 
           text = xhtml(sys.argv[1])
-          matrix = xhtml(sys.argv[2])
-          svg = xhtml(sys.argv[3])
+          svg = xhtml(sys.argv[2])
 
-          matches = re.findall(r'<pre[^>]*text-diagram[^>]*><code>(.*?)</code></pre>', text, re.S)
-          event_loop = next((body for body in matches if 'pending callbacks' in body), None)
-          assert event_loop, 'event-loop production text diagram not found'
-          first, second, *rest = event_loop.splitlines()
-          assert '┌' in first and '│' in second, (repr(first), repr(second))
-
-          labels = [
-              'A — current production pre/code',
-              'B — pre/code with zero horizontal margin and padding',
-              'C — zero horizontal geometry + text-indent: 0.01em',
-              'D — visual padding on wrapper; inner pre/code has zero geometry',
-              'E — wrapper padding + inner text-indent: 0.01em',
-              'F — wrapper padding + zero-width non-whitespace sentinel before first text node',
-              'G — one fixed-width block per source row; spaces encoded as NBSP',
-              'H — SVG control',
-          ]
-          for label in labels:
-              assert label in matrix, f'missing matrix variant: {label}'
-          for marker in [
-              'matrix-zero-geometry',
-              'text-diagram-frame',
-              'matrix-tiny-indent',
-              'matrix-sentinel',
-              'text-diagram-rows',
-              'text-diagram-svg',
-          ]:
-              assert marker in matrix, f'missing matrix marker: {marker}'
+          assert 'pending callbacks' in text, 'event-loop diagram missing'
+          assert 'text-diagram-frame' in text, 'diagram wrapper missing'
+          assert 'text-diagram-inner' in text, 'inner pre missing'
+          assert 'text-diagram-sentinel' in text, 'first-node sentinel missing'
+          assert '&#8288;' in text or '\u2060' in text, 'U+2060 WORD JOINER missing'
 
           assert 'text-diagram-svg' in svg and '<svg' in svg, 'SVG mode not emitted'
           PY
 
-          unzip -p "$MATRIX" '*.css' | grep -q 'padding-left: 0 !important'
-          unzip -p "$MATRIX" '*.css' | grep -q 'text-indent: 0.01em !important'
+          unzip -p "$TEXT" '*.css' | grep -q '.text-diagram-sentinel'
           test -f dist/build-metadata.json
       - uses: actions/upload-artifact@v4
         if: success()
