@@ -1,0 +1,12 @@
+.cache/
+.nodejs-docs-ebook/
+build/
+coverage/
+dist/
+node_modules/
+lib/
+*.tgz
+.env
+.env.*
+!.env.example
+.DS_Store
