@@ -37,6 +37,17 @@ jobs:
           unzip -l "$EPUB" | grep -q 'IBMPlexMono-Regular.ttf'
           unzip -l "$EPUB" | grep -q 'IBMPlexMono-Bold.ttf'
           unzip -p "$EPUB" '*.xhtml' | grep -q 'text-diagram'
+          python - "$EPUB" <<'PY'
+          import sys, zipfile
+          epub = sys.argv[1]
+          with zipfile.ZipFile(epub) as z:
+              html = ''.join(
+                  z.read(name).decode('utf-8')
+                  for name in z.namelist()
+                  if name.endswith('.xhtml')
+              )
+          assert '\u00a0\u00a0\u00a0┌' in html, 'diagram first-line indentation was not preserved with NBSP'
+          PY
           test -f dist/build-metadata.json
       - uses: actions/upload-artifact@v4
         if: success()
