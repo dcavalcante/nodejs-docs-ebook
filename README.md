@@ -1,6 +1,6 @@
 # Node.js Docs Ebook
 
-Build an unofficial EPUB edition of the current Node.js Learn documentation without modifying the upstream `nodejs/learn` repository.
+Build an unofficial EPUB edition of the current Node.js Learn documentation without modifying the upstream `nodejs/nodejs-learn` repository.
 
 The generator is intentionally similar to `react-docs-ebook`: it can use a local sibling checkout for development or download and cache a pinned GitHub revision for standalone builds. The book structure is declared in `book.json`, which can be checked against upstream `site.json` for additions, removals, renames, moves, and ordering changes.
 
@@ -10,11 +10,11 @@ The easiest development layout is:
 
 ```text
 ~/Projects/
-├── learn/
+├── nodejs-learn/
 └── nodejs-docs-ebook/
 ```
 
-The source checkout does **not** have to be exactly `../learn`. Source discovery walks upward from the invocation directory and checks each ancestor plus `<ancestor>/learn`. You can always override it with `--source PATH`, `NODEJS_LEARN_SOURCE`, or `--source github`.
+The source checkout does **not** have to be exactly `../nodejs-learn`. Source discovery walks upward from the invocation directory and checks each ancestor plus `<ancestor>/nodejs-learn`. You can always override it with `--source PATH`, `NODEJS_LEARN_SOURCE`, or `--source github`.
 
 Clone upstream beside this project with:
 
@@ -35,8 +35,6 @@ Install dependencies:
 npm install
 ```
 
-`@ibm/plex-mono` is used only to embed the complete IBM Plex Mono TrueType files into the EPUB. IBM's package contains a telemetry postinstall that only collects in CI/container-like environments; CI for this project explicitly sets `IBM_TELEMETRY_DISABLED=true`. You can also set that variable yourself while installing if desired.
-
 Check the machine:
 
 ```bash
@@ -45,7 +43,7 @@ npm run doctor
 
 ## Build
 
-With a sibling `learn` checkout:
+With a sibling `nodejs-learn` checkout:
 
 ```bash
 npm run build
@@ -125,7 +123,7 @@ Each article is wrapped in a temporary Pandoc fenced `Div` carrying its original
 - removes each source article's duplicate top-level heading;
 - shifts article headings beneath the book's section/page hierarchy;
 - prefixes heading IDs so anchors are unique across the whole book;
-- rewrites `/learn/...`, relative article links, and fragment links to EPUB-local anchors;
+- rewrites `/nodejs-learn/...`, relative article links, and fragment links to EPUB-local anchors;
 - resolves relative images against the original article directory;
 - identifies Unicode box-drawing code blocks for Kindle-safe styling.
 
@@ -141,4 +139,4 @@ The initial suite checks the manifest shape, route uniqueness/count, stable rout
 
 ## Licensing
 
-The generator code is MIT-licensed. Generated books incorporate upstream Node.js documentation and remain subject to upstream terms; see `NOTICE.md`. Automated public EPUB releases are intentionally not enabled until the current `nodejs/learn` documentation licensing/attribution path is confirmed.
+The generator code is MIT-licensed. Generated books incorporate upstream Node.js documentation and remain subject to upstream terms; see `NOTICE.md`. Automated public EPUB releases are intentionally not enabled until the current `nodejs/nodejs-learn` documentation licensing/attribution path is confirmed.
