@@ -20,8 +20,7 @@
     "check-updates": "npm run compile && node bin/nodejs-docs-ebook.js check-updates",
     "doctor": "npm run compile && node bin/nodejs-docs-ebook.js doctor",
     "test": "npm run compile && node --test lib/test/*.test.js",
-    "prepack": "npm run clean && npm test",
-    "build:diagram-lab": "npm run compile && node lib/src/diagram-lab.js"
+    "prepack": "npm run clean && npm test"
   },
   "engines": {
     "node": ">=18"
