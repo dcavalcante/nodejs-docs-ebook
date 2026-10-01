@@ -107,7 +107,14 @@ function Div(el)
       return image
     end,
     CodeBlock = function(code)
-      if contains_box_drawing(code.text) then code.classes:insert('text-diagram') end
+      if contains_box_drawing(code.text) then
+        code.classes:insert('text-diagram')
+        -- Kindle renders the first row of preformatted box-drawing blocks one
+        -- monospace cell to the left. Variant B of the on-device diagnostic
+        -- confirmed that one additional ordinary ASCII space restores that
+        -- row while leaving the remaining grid untouched.
+        code.text = ' ' .. code.text
+      end
       return code
     end,
   })
