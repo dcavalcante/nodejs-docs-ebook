@@ -38,7 +38,7 @@ function plexPackageRoot(): string {
   catch (error) { throw new Error(`Could not locate @ibm/plex-mono. Run npm install first. ${error instanceof Error ? error.message : String(error)}`); }
 }
 async function copyPlexFont(name: string, destination: string): Promise<void> {
-  const source = path.join(plexPackageRoot(), 'fonts', 'complete', 'woff2', name);
+  const source = path.join(plexPackageRoot(), 'fonts', 'complete', 'ttf', name);
   if (!fs.existsSync(source)) throw new Error(`Required IBM Plex Mono font is missing: ${source}`);
   await fsp.copyFile(source, destination);
 }
@@ -59,9 +59,9 @@ export async function build(manifest: BookManifest, options: BuildOptions = {}):
   const temporaryMarkdown = `${markdownFile}.${process.pid}.tmp`;
   await fsp.writeFile(temporaryMarkdown, generated.markdown); await fsp.rename(temporaryMarkdown, markdownFile);
   const fontDir = path.join(workDir, 'fonts'); await fsp.mkdir(fontDir, {recursive: true});
-  const regular = path.join(fontDir, 'IBMPlexMono-Regular.woff2');
-  const bold = path.join(fontDir, 'IBMPlexMono-Bold.woff2');
-  await Promise.all([copyPlexFont('IBMPlexMono-Regular.woff2', regular), copyPlexFont('IBMPlexMono-Bold.woff2', bold)]);
+  const regular = path.join(fontDir, 'IBMPlexMono-Regular.ttf');
+  const bold = path.join(fontDir, 'IBMPlexMono-Bold.ttf');
+  await Promise.all([copyPlexFont('IBMPlexMono-Regular.ttf', regular), copyPlexFont('IBMPlexMono-Bold.ttf', bold)]);
   const resourcePaths = [sourceRoot, ...generated.sourceDirectories];
   const common = [markdownFile, '--from=markdown+fenced_divs', '--toc', '--toc-depth=2', '--split-level=2', '--no-highlight', `--resource-path=${resourcePaths.join(path.delimiter)}`, `--lua-filter=${path.join(PROJECT_ROOT, 'filters', 'ebook.lua')}`, `--css=${path.join(PROJECT_ROOT, 'styles', 'epub.css')}`, `--epub-embed-font=${regular}`, `--epub-embed-font=${bold}`];
   const outputs: string[] = []; const stagedOutputs = new Map<string, string>();
