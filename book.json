@@ -1,0 +1,527 @@
+{
+  "$schema": "./book.schema.json",
+  "schemaVersion": 1,
+  "book": {
+    "title": "Learn Node.js",
+    "subtitle": "Unofficial EPUB edition of the Node.js learning guides",
+    "language": "en-US",
+    "slug": "learn-nodejs"
+  },
+  "source": {
+    "repository": "nodejs/learn",
+    "ref": "main",
+    "localDirectory": "nodejs-learn",
+    "sidebar": "site.json",
+    "contentDirectory": "pages",
+    "trackOrder": true
+  },
+  "sections": [
+    {
+      "title": "Getting Started",
+      "enabled": true,
+      "pages": [
+        {
+          "title": "Introduction to Node.js",
+          "path": "/learn/getting-started/introduction-to-nodejs",
+          "enabled": true
+        },
+        {
+          "title": "How much JavaScript do you need to know to use Node.js?",
+          "path": "/learn/getting-started/how-much-javascript-do-you-need-to-know-to-use-nodejs",
+          "enabled": true
+        },
+        {
+          "title": "Differences between Node.js and the Browser",
+          "path": "/learn/getting-started/differences-between-nodejs-and-the-browser",
+          "enabled": true
+        },
+        {
+          "title": "The V8 JavaScript Engine",
+          "path": "/learn/getting-started/the-v8-javascript-engine",
+          "enabled": true
+        },
+        {
+          "title": "An introduction to the npm package manager",
+          "path": "/learn/getting-started/an-introduction-to-the-npm-package-manager",
+          "enabled": true
+        },
+        {
+          "title": "ECMAScript 2015 (ES6) and beyond",
+          "path": "/learn/getting-started/ecmascript-2015-es6-and-beyond",
+          "enabled": true
+        },
+        {
+          "title": "Debugging Node.js",
+          "path": "/learn/getting-started/debugging",
+          "enabled": true
+        },
+        {
+          "title": "Fetching data with Node.js",
+          "path": "/learn/getting-started/fetch",
+          "enabled": true
+        },
+        {
+          "title": "WebSocket client with Node.js",
+          "path": "/learn/getting-started/websocket",
+          "enabled": true
+        },
+        {
+          "title": "Node.js, the difference between development and production",
+          "path": "/learn/getting-started/nodejs-the-difference-between-development-and-production",
+          "enabled": true
+        },
+        {
+          "title": "Profiling Node.js Applications",
+          "path": "/learn/getting-started/profiling",
+          "enabled": true
+        },
+        {
+          "title": "Node.js with WebAssembly",
+          "path": "/learn/getting-started/nodejs-with-webassembly",
+          "enabled": true
+        },
+        {
+          "title": "Security Best Practices",
+          "path": "/learn/getting-started/security-best-practices",
+          "enabled": true
+        },
+        {
+          "title": "Introduction to Userland Migrations",
+          "path": "/learn/getting-started/userland-migrations",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "title": "Command Line",
+      "enabled": true,
+      "pages": [
+        {
+          "title": "Run Node.js scripts from the command line",
+          "path": "/learn/command-line/run-nodejs-scripts-from-the-command-line",
+          "enabled": true
+        },
+        {
+          "title": "How to use the Node.js REPL",
+          "path": "/learn/command-line/how-to-use-the-nodejs-repl",
+          "enabled": true
+        },
+        {
+          "title": "Output to the command line using Node.js",
+          "path": "/learn/command-line/output-to-the-command-line-using-nodejs",
+          "enabled": true
+        },
+        {
+          "title": "Accept input from the command line in Node.js",
+          "path": "/learn/command-line/accept-input-from-the-command-line-in-nodejs",
+          "enabled": true
+        },
+        {
+          "title": "How to read environment variables from Node.js",
+          "path": "/learn/command-line/how-to-read-environment-variables-from-nodejs",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "title": "HTTP",
+      "enabled": true,
+      "pages": [
+        {
+          "title": "Anatomy of an HTTP Transaction",
+          "path": "/learn/http/anatomy-of-an-http-transaction",
+          "enabled": true
+        },
+        {
+          "title": "Enterprise Network Configuration",
+          "path": "/learn/http/enterprise-network-configuration",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "title": "Manipulating Files",
+      "enabled": true,
+      "pages": [
+        {
+          "title": "Node.js file stats",
+          "path": "/learn/manipulating-files/nodejs-file-stats",
+          "enabled": true
+        },
+        {
+          "title": "Node.js File Paths",
+          "path": "/learn/manipulating-files/nodejs-file-paths",
+          "enabled": true
+        },
+        {
+          "title": "Reading files with Node.js",
+          "path": "/learn/manipulating-files/reading-files-with-nodejs",
+          "enabled": true
+        },
+        {
+          "title": "Writing files with Node.js",
+          "path": "/learn/manipulating-files/writing-files-with-nodejs",
+          "enabled": true
+        },
+        {
+          "title": "Working with file descriptors in Node.js",
+          "path": "/learn/manipulating-files/working-with-file-descriptors-in-nodejs",
+          "enabled": true
+        },
+        {
+          "title": "Working with folders in Node.js",
+          "path": "/learn/manipulating-files/working-with-folders-in-nodejs",
+          "enabled": true
+        },
+        {
+          "title": "How to work with Different Filesystems",
+          "path": "/learn/manipulating-files/working-with-different-filesystems",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "title": "Asynchronous Work",
+      "enabled": true,
+      "pages": [
+        {
+          "title": "JavaScript Asynchronous Programming and Callbacks",
+          "path": "/learn/asynchronous-work/javascript-asynchronous-programming-and-callbacks",
+          "enabled": true
+        },
+        {
+          "title": "Asynchronous flow control",
+          "path": "/learn/asynchronous-work/asynchronous-flow-control",
+          "enabled": true
+        },
+        {
+          "title": "Discover Promises in Node.js",
+          "path": "/learn/asynchronous-work/discover-promises-in-nodejs",
+          "enabled": true
+        },
+        {
+          "title": "Discover JavaScript Timers",
+          "path": "/learn/asynchronous-work/discover-javascript-timers",
+          "enabled": true
+        },
+        {
+          "title": "Overview of Blocking vs Non-Blocking",
+          "path": "/learn/asynchronous-work/overview-of-blocking-vs-non-blocking",
+          "enabled": true
+        },
+        {
+          "title": "The Node.js Event Loop",
+          "path": "/learn/asynchronous-work/event-loop-timers-and-nexttick",
+          "enabled": true
+        },
+        {
+          "title": "The Node.js Event Emitter",
+          "path": "/learn/asynchronous-work/the-nodejs-event-emitter",
+          "enabled": true
+        },
+        {
+          "title": "Understanding process.nextTick()",
+          "path": "/learn/asynchronous-work/understanding-processnexttick",
+          "enabled": true
+        },
+        {
+          "title": "Understanding setImmediate()",
+          "path": "/learn/asynchronous-work/understanding-setimmediate",
+          "enabled": true
+        },
+        {
+          "title": "Don't Block the Event Loop",
+          "path": "/learn/asynchronous-work/dont-block-the-event-loop",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "title": "Concurrency",
+      "enabled": true,
+      "pages": [
+        {
+          "title": "Comparing Node.js concurrency models",
+          "path": "/learn/concurrency/comparing-nodejs-concurrency-models",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "title": "TypeScript",
+      "enabled": true,
+      "pages": [
+        {
+          "title": "Introduction to TypeScript",
+          "path": "/learn/typescript/introduction",
+          "enabled": true
+        },
+        {
+          "title": "Running TypeScript Natively",
+          "path": "/learn/typescript/run-natively",
+          "enabled": true
+        },
+        {
+          "title": "Running TypeScript code using transpilation",
+          "path": "/learn/typescript/transpile",
+          "enabled": true
+        },
+        {
+          "title": "Running TypeScript with a runner",
+          "path": "/learn/typescript/run",
+          "enabled": true
+        },
+        {
+          "title": "Publishing a TypeScript package",
+          "path": "/learn/typescript/publishing-a-ts-package",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "title": "Modules",
+      "enabled": true,
+      "pages": [
+        {
+          "title": "How to use streams",
+          "path": "/learn/modules/how-to-use-streams",
+          "enabled": true
+        },
+        {
+          "title": "Backpressuring in Streams",
+          "path": "/learn/modules/backpressuring-in-streams",
+          "enabled": true
+        },
+        {
+          "title": "Publishing a package",
+          "path": "/learn/modules/publishing-a-package",
+          "enabled": true
+        },
+        {
+          "title": "How to publish a Node-API package",
+          "path": "/learn/modules/publishing-node-api-modules",
+          "enabled": true
+        },
+        {
+          "title": "ABI Stability",
+          "path": "/learn/modules/abi-stability",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "title": "Diagnostics",
+      "enabled": true,
+      "pages": [
+        {
+          "title": "User Journey",
+          "path": "/learn/diagnostics/user-journey",
+          "enabled": true
+        },
+        {
+          "title": "Memory",
+          "path": "/learn/diagnostics/memory",
+          "enabled": true
+        },
+        {
+          "title": "Understanding and Tuning Memory",
+          "path": "/learn/diagnostics/memory/understanding-and-tuning-memory",
+          "enabled": true
+        },
+        {
+          "title": "Using Heap Profiler",
+          "path": "/learn/diagnostics/memory/using-heap-profiler",
+          "enabled": true
+        },
+        {
+          "title": "Using Heap Snapshot",
+          "path": "/learn/diagnostics/memory/using-heap-snapshot",
+          "enabled": true
+        },
+        {
+          "title": "Tracing garbage collection",
+          "path": "/learn/diagnostics/memory/using-gc-traces",
+          "enabled": true
+        },
+        {
+          "title": "Live Debugging",
+          "path": "/learn/diagnostics/live-debugging",
+          "enabled": true
+        },
+        {
+          "title": "Using Inspector",
+          "path": "/learn/diagnostics/live-debugging/using-inspector",
+          "enabled": true
+        },
+        {
+          "title": "Poor Performance",
+          "path": "/learn/diagnostics/poor-performance",
+          "enabled": true
+        },
+        {
+          "title": "Using Linux Perf",
+          "path": "/learn/diagnostics/poor-performance/using-linux-perf",
+          "enabled": true
+        },
+        {
+          "title": "Flame Graphs",
+          "path": "/learn/diagnostics/flame-graphs",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "title": "Test Runner",
+      "enabled": true,
+      "pages": [
+        {
+          "title": "Discovering Node.js's test runner",
+          "path": "/learn/test-runner/introduction",
+          "enabled": true
+        },
+        {
+          "title": "Using Node.js's test runner",
+          "path": "/learn/test-runner/using-test-runner",
+          "enabled": true
+        },
+        {
+          "title": "Mocking in tests",
+          "path": "/learn/test-runner/mocking",
+          "enabled": true
+        },
+        {
+          "title": "Collecting code coverage in Node.js",
+          "path": "/learn/test-runner/collecting-code-coverage",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "title": "Node-API",
+      "enabled": true,
+      "pages": [
+        {
+          "title": "What is Node-API?",
+          "path": "/learn/node-api",
+          "enabled": true
+        },
+        {
+          "title": "Getting Started",
+          "path": "/learn/node-api/getting-started",
+          "enabled": true
+        },
+        {
+          "title": "Pre-requisites",
+          "path": "/learn/node-api/getting-started/prerequisites",
+          "enabled": true
+        },
+        {
+          "title": "Tools",
+          "path": "/learn/node-api/getting-started/tools",
+          "enabled": true
+        },
+        {
+          "title": "Anatomy of a Node-API project",
+          "path": "/learn/node-api/getting-started/project-structure",
+          "enabled": true
+        },
+        {
+          "title": "Your First Project",
+          "path": "/learn/node-api/getting-started/your-first-project",
+          "enabled": true
+        },
+        {
+          "title": "Object Wrap",
+          "path": "/learn/node-api/getting-started/objectwrap",
+          "enabled": true
+        },
+        {
+          "title": "Migrating to Node-API",
+          "path": "/learn/node-api/getting-started/migration",
+          "enabled": true
+        },
+        {
+          "title": "Build Tools",
+          "path": "/learn/node-api/build-tools",
+          "enabled": true
+        },
+        {
+          "title": "node-gyp",
+          "path": "/learn/node-api/build-tools/node-gyp",
+          "enabled": true
+        },
+        {
+          "title": "CMake.js",
+          "path": "/learn/node-api/build-tools/cmake-js",
+          "enabled": true
+        },
+        {
+          "title": "node-pre-gyp",
+          "path": "/learn/node-api/build-tools/node-pre-gyp",
+          "enabled": true
+        },
+        {
+          "title": "Special Topics",
+          "path": "/learn/node-api/special-topics",
+          "enabled": true
+        },
+        {
+          "title": "Context Awareness",
+          "path": "/learn/node-api/special-topics/context-awareness",
+          "enabled": true
+        },
+        {
+          "title": "Object and Function References",
+          "path": "/learn/node-api/special-topics/object-function-refs",
+          "enabled": true
+        },
+        {
+          "title": "AsyncWorker",
+          "path": "/learn/node-api/special-topics/asyncworker",
+          "enabled": true
+        },
+        {
+          "title": "Thread-Safe Functions",
+          "path": "/learn/node-api/special-topics/thread-safe-functions",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "title": "Userland Migrations",
+      "enabled": true,
+      "pages": [
+        {
+          "title": "ansi-colors to util.styleText",
+          "path": "/learn/userland-migrations/ansi-colors-to-styletext",
+          "enabled": true
+        },
+        {
+          "title": "Axios to WHATWG Fetch",
+          "path": "/learn/userland-migrations/axios-to-whatwg-fetch",
+          "enabled": true
+        },
+        {
+          "title": "Chalk to util.styleText()",
+          "path": "/learn/userland-migrations/chalk-to-util-styletext",
+          "enabled": true
+        },
+        {
+          "title": "Correct TypeScript Specifiers",
+          "path": "/learn/userland-migrations/correct-ts-specifiers",
+          "enabled": true
+        },
+        {
+          "title": "Kleur to util.styleText",
+          "path": "/learn/userland-migrations/kleur-to-util-styletext",
+          "enabled": true
+        },
+        {
+          "title": "Mocha to Node.js Test Runner",
+          "path": "/learn/userland-migrations/mocha-to-node-test-runner",
+          "enabled": true
+        }
+      ]
+    }
+  ]
+}
