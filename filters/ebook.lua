@@ -159,7 +159,12 @@ local function process_div(el)
     end,
     CodeBlock = function(code)
       if not contains_box_drawing(code.text) then return code end
-      if diagram_mode == 'svg' then return svg_diagram(code.text) end
+      if diagram_mode == 'svg' then
+        return {
+          pandoc.Para({pandoc.Str('')}),
+          svg_diagram(code.text)
+        }
+      end
       if diagram_mode == 'matrix' then return matrix_diagram(code) end
       code.classes:insert('text-diagram')
       return code
