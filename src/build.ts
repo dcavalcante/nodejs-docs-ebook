@@ -4,6 +4,7 @@ import path from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {spawnSync} from 'node:child_process';
 import {dependencyError} from './dependencies';
+import {preparePlexFonts} from './fonts';
 import {generateBook} from './generator';
 import {PROJECT_ROOT, resolveSource, sourceRevision} from './source';
 import type {BookManifest, BuildMetadata, BuildOptions, BuildResult} from './types';
@@ -33,15 +34,7 @@ async function publishOutputs(staged: ReadonlyMap<string, string>): Promise<void
   }
   await Promise.allSettled([...backups.values()].map((backup) => fsp.rm(backup, {force: true})));
 }
-function plexPackageRoot(): string {
-  try { return path.dirname(require.resolve('@ibm/plex-mono/package.json')); }
-  catch (error) { throw new Error(`Could not locate @ibm/plex-mono. Run npm install first. ${error instanceof Error ? error.message : String(error)}`); }
-}
-async function copyPlexFont(name: string, destination: string): Promise<void> {
-  const source = path.join(plexPackageRoot(), 'fonts', 'complete', 'ttf', name);
-  if (!fs.existsSync(source)) throw new Error(`Required IBM Plex Mono font is missing: ${source}`);
-  await fsp.copyFile(source, destination);
-}
+
 export async function build(manifest: BookManifest, options: BuildOptions = {}): Promise<BuildResult> {
   const deps = dependencyError();
   if (!deps.result.hasPandoc) throw new Error(`Missing build dependencies.\n\n${deps.message}`);
@@ -58,10 +51,7 @@ export async function build(manifest: BookManifest, options: BuildOptions = {}):
   const markdownFile = path.join(workDir, `${outputStem}.md`);
   const temporaryMarkdown = `${markdownFile}.${process.pid}.tmp`;
   await fsp.writeFile(temporaryMarkdown, generated.markdown); await fsp.rename(temporaryMarkdown, markdownFile);
-  const fontDir = path.join(workDir, 'fonts'); await fsp.mkdir(fontDir, {recursive: true});
-  const regular = path.join(fontDir, 'IBMPlexMono-Regular.ttf');
-  const bold = path.join(fontDir, 'IBMPlexMono-Bold.ttf');
-  await Promise.all([copyPlexFont('IBMPlexMono-Regular.ttf', regular), copyPlexFont('IBMPlexMono-Bold.ttf', bold)]);
+  const {regular, bold} = await preparePlexFonts(workDir);
   const resourcePaths = [sourceRoot, ...generated.sourceDirectories];
   const common = [markdownFile, '--from=markdown+fenced_divs', '--toc', '--toc-depth=2', '--split-level=2', '--no-highlight', `--resource-path=${resourcePaths.join(path.delimiter)}`, `--lua-filter=${path.join(PROJECT_ROOT, 'filters', 'ebook.lua')}`, `--css=${path.join(PROJECT_ROOT, 'styles', 'epub.css')}`, `--epub-embed-font=${regular}`, `--epub-embed-font=${bold}`];
   const outputs: string[] = []; const stagedOutputs = new Map<string, string>();
