@@ -76,8 +76,14 @@ export interface IndexReport {
   manifestPages: number;
 }
 
+export interface GeneratedInput {
+  fileName: string;
+  markdown: string;
+}
+
 export interface GeneratedBook {
   markdown: string;
+  inputs: GeneratedInput[];
   pageCount: number;
   sourceDirectories: string[];
 }
