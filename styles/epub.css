@@ -2,14 +2,14 @@
   font-family: "IBM Plex Mono Ebook";
   font-style: normal;
   font-weight: 400;
-  src: url("../fonts/IBMPlexMono-Regular.woff2") format("woff2");
+  src: url("../fonts/IBMPlexMono-Regular.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "IBM Plex Mono Ebook";
   font-style: normal;
   font-weight: 700;
-  src: url("../fonts/IBMPlexMono-Bold.woff2") format("woff2");
+  src: url("../fonts/IBMPlexMono-Bold.ttf") format("truetype");
 }
 
 html,
