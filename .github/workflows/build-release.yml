@@ -123,5 +123,8 @@ jobs:
         run: |
           EPUB="$(find dist -maxdepth 1 -name 'learn-nodejs-*.epub' ! -name '*-svg.epub' -print | head -1)"
           test -n "$EPUB"
-          gh release create "${GITHUB_REF_NAME}" "$EPUB" dist/build-metadata.json \
-            --repo "${GITHUB_REPOSITORY}" --generate-notes
+          if ! gh release view "${GITHUB_REF_NAME}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+            gh release create "${GITHUB_REF_NAME}" --repo "${GITHUB_REPOSITORY}" --generate-notes
+          fi
+          gh release upload "${GITHUB_REF_NAME}" "$EPUB" dist/build-metadata.json \
+            --repo "${GITHUB_REPOSITORY}" --clobber
