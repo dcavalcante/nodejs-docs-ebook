@@ -1,0 +1,127 @@
+name: Test, build, and publish ebook
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      node_ref:
+        description: Node.js Learn branch, tag, or commit
+        default: main
+        required: true
+  schedule:
+    - cron: "43 7 * * 1"
+
+concurrency:
+  group: build-ebook-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      IBM_TELEMETRY_DISABLED: "true"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npm test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      IBM_TELEMETRY_DISABLED: "true"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - run: npm install
+      - name: Install Pandoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+      - name: Build current Node.js Learn EPUB
+        env:
+          NODE_REF: ${{ inputs.node_ref || 'main' }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: npm run build -- --source github --ref "$NODE_REF"
+      - name: Build SVG diagram mode
+        env:
+          NODE_REF: ${{ inputs.node_ref || 'main' }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: npm run build:svg -- --source github --ref "$NODE_REF"
+      - name: Inspect EPUB payload
+        run: |
+          TEXT="$(find dist -maxdepth 1 -name '*.epub' ! -name '*-svg.epub' -print | head -1)"
+          SVG="$(find dist -maxdepth 1 -name '*-svg.epub' -print | head -1)"
+          test -n "$TEXT"
+          test -n "$SVG"
+
+          unzip -l "$TEXT" | grep -q 'IBMPlexMono-Regular.ttf'
+          unzip -l "$TEXT" | grep -q 'IBMPlexMono-Bold.ttf'
+
+          python - "$TEXT" "$SVG" <<'PY'
+          import sys, zipfile
+
+          def xhtml(epub):
+              with zipfile.ZipFile(epub) as z:
+                  return ''.join(
+                      z.read(name).decode('utf-8')
+                      for name in z.namelist()
+                      if name.endswith('.xhtml')
+                  )
+
+          text = xhtml(sys.argv[1])
+          svg = xhtml(sys.argv[2])
+
+          assert 'pending callbacks' in text, 'event-loop diagram missing'
+          assert 'text-diagram-frame' in text, 'diagram wrapper missing'
+          assert 'text-diagram-inner' in text, 'inner pre missing'
+          assert 'text-diagram-sentinel' in text, 'first-node sentinel missing'
+          assert '&#8288;' in text or '\u2060' in text, 'U+2060 WORD JOINER missing'
+
+          assert 'text-diagram-svg' in svg and '<svg' in svg, 'SVG mode not emitted'
+          PY
+
+          unzip -p "$TEXT" '*.css' | grep -q '.text-diagram-sentinel'
+          test -f dist/build-metadata.json
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: nodejs-docs-ebook
+          path: |
+            dist/*.epub
+            dist/build-metadata.json
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: nodejs-docs-ebook
+          path: dist
+      - name: Publish tagged release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          EPUB="$(find dist -maxdepth 1 -name 'learn-nodejs-*.epub' ! -name '*-svg.epub' -print | head -1)"
+          test -n "$EPUB"
+          gh release create "${GITHUB_REF_NAME}" "$EPUB" dist/build-metadata.json \
+            --repo "${GITHUB_REPOSITORY}" --generate-notes
