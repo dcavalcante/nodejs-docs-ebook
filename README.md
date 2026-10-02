@@ -2,6 +2,8 @@
 
 Build an unofficial EPUB edition of the current Node.js Learn documentation without modifying the upstream `nodejs/learn` repository.
 
+**[Download the latest published edition](https://github.com/dcavalcante/nodejs-docs-ebook/releases/latest)**
+
 The generator is intentionally similar to `react-docs-ebook`: it can use a local sibling checkout for development or download and cache a pinned GitHub revision for standalone builds. The book structure is declared in `book.json`, which can be checked against upstream `site.json` for additions, removals, renames, moves, and ordering changes.
 
 ## Local layout
@@ -139,6 +141,12 @@ npm test
 
 The initial suite checks the manifest shape, route uniqueness/count, stable route IDs, unsafe source-path rejection, and nested-sidebar de-duplication.
 
+## Automation and releases
+
+GitHub Actions runs the test suite and builds both the default Unicode EPUB and the SVG fallback on pull requests and pushes. It also runs weekly and can be started manually against a selected `nodejs/learn` ref.
+
+Pushing a `v*` tag publishes a GitHub Release containing the default EPUB and `build-metadata.json`. The SVG build remains a CI artifact and fallback rather than a second public edition.
+
 ## Licensing
 
-The generator code is MIT-licensed. Generated books incorporate upstream Node.js documentation and remain subject to upstream terms; see `NOTICE.md`. Automated public EPUB releases are intentionally not enabled until the current `nodejs/learn` documentation licensing/attribution path is confirmed.
+The generator code is MIT-licensed. Generated books incorporate upstream Node.js documentation and remain subject to upstream terms; see `NOTICE.md`. The tagged-release workflow is configured, but public release tags should wait until the current `nodejs/learn` documentation licensing/attribution path is confirmed.
