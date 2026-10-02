@@ -89,30 +89,32 @@ npm run check-updates -- --source github --ref main --refresh
 
 The command exits with status `2` when the manifest needs review.
 
-## Kindle / Unicode diagram experiment
+## Unicode box-drawing diagrams
 
-The Node.js event-loop illustration stays as its original Unicode box-drawing text in the source and in the generated EPUB. A Pandoc Lua filter detects code blocks containing Unicode Box Drawing characters (`U+2500–U+257F`) and marks only those blocks as `text-diagram`.
+The Node.js event-loop illustration stays as its original Unicode box-drawing text in the source and in the generated EPUB. A Pandoc Lua filter detects code blocks containing Unicode Box Drawing characters (`U+2500–U+257F`) and applies diagram-specific markup and styling only to those blocks.
 
-The EPUB then:
+The EPUB:
 
 - embeds the **complete** IBM Plex Mono regular and bold TrueType fonts;
 - keeps ordinary code at `white-space: pre-wrap` so long source lines can wrap on narrow readers;
-- forces box-drawing blocks to `white-space: pre` with wrapping, hyphenation, kerning, and ligatures disabled;
-- renders diagrams at a smaller size (`0.70em`) to improve the chance that the widest Node diagrams fit a portrait e-reader viewport.
+- renders box-drawing blocks as a fixed monospace grid with wrapping, hyphenation, kerning, and ligatures disabled;
+- uses a wrapper for visual padding while keeping the inner `pre/code` geometry at zero;
+- inserts a zero-width, non-whitespace `U+2060 WORD JOINER` sentinel before the first diagram text node. This prevents Kindle/Send to Kindle from shifting only the first row of the grid during conversion;
+- renders diagrams at `0.70em` so the widest Node diagrams fit typical portrait e-reader viewports.
 
-This is deliberately Unicode-first. SVG should only become a fallback if real-device tests show that a reader ignores the embedded font or cannot fit the fixed grid at a readable size.
+The Unicode renderer is the default. An SVG renderer remains available as a fallback via `--diagram-mode svg`.
 
-### What to test on a Paperwhite
+### Validation
 
-After building, send `dist/learn-nodejs-YYYY-MM-DD.epub` to the Kindle and open **Asynchronous Work → The Node.js Event Loop**. Check that:
+After building, open **Asynchronous Work → The Node.js Event Loop** and check that:
 
 1. corners and junctions line up;
 2. `incoming: connections, data, etc.` stays inside its box instead of wrapping;
 3. the left return arrow remains continuous;
-4. changing Kindle body font does not change the diagram's monospace font;
+4. changing the reader's body font does not change the diagram's monospace font;
 5. normal code blocks elsewhere still wrap instead of overflowing.
 
-If the geometry is correct but too small, the first tuning knob is the `.text-diagram` `font-size` in `styles/epub.css` (try `0.74em`, `0.78em`, etc.). If geometry itself breaks, then the reader is likely not honoring the embedded font consistently and an SVG fallback becomes justified.
+The Unicode path, including the `U+2060` first-node workaround, has been validated on a Kindle Paperwhite through Send to Kindle.
 
 ## Conversion model
 
